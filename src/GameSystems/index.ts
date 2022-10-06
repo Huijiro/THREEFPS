@@ -38,12 +38,23 @@ class GameSystems {
   }
 
   resize() {
-    this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight;
-    this.camera.updateProjectionMatrix();
+    if (
+      this.canvas.height !== this.canvas.clientHeight ||
+      this.canvas.width !== this.canvas.clientWidth
+    ) {
+      this.camera.aspect = this.canvas.clientWidth / this.canvas.clientHeight;
+      this.renderer.setSize(
+        this.canvas.clientWidth,
+        this.canvas.clientHeight,
+        false
+      );
+      this.camera.updateProjectionMatrix();
+    }
   }
 
   render(time: number) {
     time *= 0.001;
+    this.resize();
     this.renderer.render(this.scene, this.camera);
     this.entities.forEach((entity) => entity.update());
 
